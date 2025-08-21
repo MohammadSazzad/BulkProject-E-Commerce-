@@ -1,0 +1,225 @@
+@model List<Product>
+
+<div class="container-fluid py-4">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-dark text-white p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-primary bg-opacity-75 rounded-circle p-3 me-3">
+                                <i class="bi bi-book-fill fs-2 text-white"></i>
+                            </div>
+                            <div>
+                                <h1 class="mb-0 fw-bold">Product Management</h1>
+                                <p class="mb-0 text-white-50">Manage your book inventory with ease</p>
+                            </div>
+                        </div>
+                        <a class="btn btn-primary btn-lg shadow-sm fw-semibold" asp-area="Admin" asp-controller="Product" asp-action="Upsert">
+                            <i class="bi bi-plus-circle-fill me-2"></i>Add New Product
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Row -->
+    <div class="row mb-4 g-3">
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-primary text-white h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-book fs-1 mb-2"></i>
+                    <h3 class="mb-1 fw-bold">@ViewBag.TotalProducts</h3>
+                    <p class="mb-0 small text-white-50">Total Products</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-dark text-white h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-tags fs-1 mb-2"></i>
+                    <h3 class="mb-1 fw-bold">@(Model?.Where(p => p.Category != null).Select(p => p.CategoryId).Distinct().Count() ?? 0)</h3>
+                    <p class="mb-0 small text-white-50">Categories</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-info text-white h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="bi bi-currency-dollar fs-1 mb-2"></i>
+                    <h3 class="mb-1 fw-bold">$@(Model?.Any() == true ? Model.Average(p => p.Price).ToString("F0") : "0")</h3>
+                    <p class="mb-0 small text-white-50">Avg Price</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card bg-navy text-white h-100 border-0 shadow-sm" style="background-color: #1a365d !important;">
+                <div class="card-body text-center">
+                    <i class="bi bi-star fs-1 mb-2"></i>
+                    <h3 class="mb-1 fw-bold">4.8</h3>
+                    <p class="mb-0 small text-white-50">Avg Rating</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-4">
+            @foreach (var product in Model)
+            {
+                <div class="col-xl-4 col-lg-6 col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <!-- Product Image -->
+                        <div class="position-relative">
+                            @if (!string.IsNullOrEmpty(product.ImageUrl))
+                            {
+                                <img src="@product.ImageUrl" alt="@product.Title" class="card-img-top" style="height: 200px; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <div class="bg-secondary d-flex align-items-center justify-content-center text-white" style="height: 200px;">
+                                    <i class="bi bi-book fs-1"></i>
+                                </div>
+                            }
+                            
+                            <!-- Category Badge -->
+                            <div class="position-absolute top-0 start-0 m-3">
+                                <span class="badge bg-dark rounded-pill">@(product.Category?.Name ?? "Uncategorized")</span>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body d-flex flex-column">
+                            <!-- Title -->
+                            <h5 class="card-title fw-bold mb-2 text-dark">@product.Title</h5>
+                            
+                            <!-- Author -->
+                            <p class="text-muted mb-2 small">
+                                <i class="bi bi-person me-1"></i>@product.Author
+                            </p>
+                            
+                            <!-- Description -->
+                            <p class="card-text text-muted small mb-3 flex-grow-1">
+                                @(product.Description.Length > 80 ? product.Description.Substring(0, 80) + "..." : product.Description)
+                            </p>
+                            
+                            <!-- ISBN -->
+                            <div class="mb-3">
+                                <small class="text-muted">
+                                    <i class="bi bi-upc me-1"></i>ISBN: <span class="fw-semibold">@product.ISBN</span>
+                                </small>
+                            </div>
+                            
+                            <!-- Price Section -->
+                            <div class="border-top pt-3 mb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="badge bg-success fs-6 px-3 py-2">$@product.Price.ToString("F2")</span>
+                                        @if (product.ListPrice > product.Price)
+                                        {
+                                            <br><small class="text-muted text-decoration-line-through">$@product.ListPrice.ToString("F2")</small>
+                                        }
+                                    </div>
+                                    <div class="text-end">
+                                        <small class="text-muted d-block">50+: <span class="fw-semibold">$@product.Price50.ToString("F2")</span></small>
+                                        <small class="text-muted">100+: <span class="fw-semibold">$@product.Price100.ToString("F2")</span></small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="d-grid gap-2 d-md-flex mt-auto">
+                                <a class="btn btn-outline-primary btn-sm flex-fill" asp-controller="Product" asp-action="Upsert" asp-route-id="@product.Id">
+                                    <i class="bi bi-pencil-square me-1"></i>Edit
+                                </a>
+                                <a class="btn btn-outline-dark btn-sm flex-fill" asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id">
+                                    <i class="bi bi-trash me-1"></i>Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <!-- Pagination Controls -->
+        @if (ViewBag.TotalPages > 1)
+        {
+            <div class="d-flex justify-content-center align-items-center mt-5">
+                <nav aria-label="Product pagination">
+                    <ul class="pagination mb-0">
+                        <!-- Previous Button -->
+                        <li class="page-item @(!ViewBag.HasPreviousPage ? "disabled" : "")">
+                            @if (ViewBag.HasPreviousPage)
+                            {
+                                <a class="page-link text-dark border-dark" asp-controller="Product" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="page-link text-muted border-secondary bg-light">
+                                    <i class="bi bi-chevron-left"></i>
+                                </span>
+                            }
+                        </li>
+                        
+                        <!-- Page Numbers -->
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                @if (i == ViewBag.CurrentPage)
+                                {
+                                    <span class="page-link bg-dark border-dark text-white">@i</span>
+                                }
+                                else
+                                {
+                                    <a class="page-link text-dark border-dark" asp-controller="Product" asp-action="Index" asp-route-page="@i">@i</a>
+                                }
+                            </li>
+                        }
+                        
+                        <!-- Next Button -->
+                        <li class="page-item @(!ViewBag.HasNextPage ? "disabled" : "")">
+                            @if (ViewBag.HasNextPage)
+                            {
+                                <a class="page-link text-dark border-dark" asp-controller="Product" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="page-link text-muted border-secondary bg-light">
+                                    <i class="bi bi-chevron-right"></i>
+                                </span>
+                            }
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        }
+    }
+    else
+    {
+        <!-- Empty State -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center py-5">
+                        <div class="mb-4">
+                            <i class="bi bi-book display-1 text-muted"></i>
+                        </div>
+                        <h3 class="text-muted mb-3">No Products Found</h3>
+                        <p class="text-muted mb-4">Start building your inventory by adding your first product.</p>
+                        <a class="btn btn-primary btn-lg" asp-controller="Product" asp-action="Upsert">
+                            <i class="bi bi-plus-circle me-2"></i>Add Your First Product
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

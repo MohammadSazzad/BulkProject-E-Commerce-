@@ -1,4 +1,7 @@
-using BulkProject.Data;
+using Bulk.DataAccess.Data;
+using Bulk.DataAccess.Repository;
+using Bulk.DataAccess.Repository.IRepository;
+using Bulk.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +11,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<BulkDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 
@@ -29,8 +33,13 @@ app.UseAuthorization();
 app.MapStaticAssets();
 
 app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}")
+    .WithStaticAssets();
+
+app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 

@@ -1,0 +1,99 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container-fluid py-5 min-vh-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h1 class="display-4 fw-bold text-primary">
+                    <i class="bi bi-shield-check me-3"></i>Admin Dashboard
+                </h1>
+                <p class="lead text-muted">Manage your application from here</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Categories Card -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-lg border-0 rounded-4 hover-card">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-grid-3x3-gap-fill text-primary" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Categories</h5>
+                        <p class="card-text text-muted">Manage product categories</p>
+                        <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="btn btn-primary btn-lg">
+                            <i class="bi bi-arrow-right-circle me-2"></i>Manage
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Products Card -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-lg border-0 rounded-4 hover-card">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-book-fill text-success" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Products</h5>
+                        <p class="card-text text-muted">Manage your book inventory</p>
+                        <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="btn btn-success btn-lg">
+                            <i class="bi bi-arrow-right-circle me-2"></i>Manage
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Users Card (Future) -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-lg border-0 rounded-4 hover-card">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <i class="bi bi-people-fill text-warning" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">Users</h5>
+                        <p class="card-text text-muted">Manage user accounts</p>
+                        <button class="btn btn-outline-secondary btn-lg" disabled>
+                            <i class="bi bi-hourglass-split me-2"></i>Coming Soon
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card bg-light border-0 rounded-4">
+                    <div class="card-body p-4">
+                        <h6 class="card-title fw-bold text-primary">
+                            <i class="bi bi-info-circle me-2"></i>Quick Stats
+                        </h6>
+                        <div class="row text-center">
+                            <div class="col-md-4">
+                                <h4 class="text-primary fw-bold">3</h4>
+                                <small class="text-muted">Categories</small>
+                            </div>
+                            <div class="col-md-4">
+                                <h4 class="text-success fw-bold">0</h4>
+                                <small class="text-muted">Products</small>
+                            </div>
+                            <div class="col-md-4">
+                                <h4 class="text-warning fw-bold">0</h4>
+                                <small class="text-muted">Users</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-card:hover {
+        transform: translateY(-5px);
+        transition: transform 0.3s ease;
+    }
+</style>

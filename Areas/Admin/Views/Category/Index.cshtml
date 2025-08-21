@@ -1,0 +1,69 @@
+@model List<Category>
+<div class="container-fluid py-5 min-vh-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-header bg-gradient bg-primary text-white p-4 rounded-top-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-grid-3x3-gap-fill fs-3 me-3"></i>
+                                <h2 class="mb-0 fw-bold">Category</h2>
+                            </div>
+                            <a class="btn btn-light btn-lg d-flex align-items-center gap-2 shadow-sm" asp-controller="Category" asp-action="Create">
+                                <i class="bi bi-plus-circle-fill"></i> <span class="fw-semibold">Create New</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col" class="px-4 py-3 fw-semibold fs-6">
+                                            <i class="bi bi-tag-fill me-2"></i>Category Name
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 fw-semibold fs-6">
+                                            <i class="bi bi-sort-numeric-down me-2"></i>Display Order
+                                        </th>
+                                        <th scope="col" class="text-center px-4 py-3 fw-semibold fs-6">
+                                            <i class="bi bi-gear-fill me-2"></i>Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var category in Model.OrderBy(c => c.DisplayOrder))
+                                    {
+                                        <tr class="border-0">
+                                            <td class="px-4 py-3">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="bg-primary bg-gradient rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                                        <i class="bi bi-bookmark-fill text-white"></i>
+                                                    </div>
+                                                    <span class="fw-semibold fs-6">@category.Name</span>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3">
+                                                <span class="badge bg-info bg-gradient fs-6 px-3 py-2">@category.DisplayOrder</span>
+                                            </td>
+                                            <td class="text-center px-4 py-3">
+                                                <div class="d-flex justify-content-center gap-2">
+                                                    <a class="btn btn-success btn-sm px-3 py-2 d-flex align-items-center gap-2 shadow-sm" asp-controller="Category" asp-action="Edit" asp-route-id="@category.Id" title="Edit Category" style="min-width: 80px;">
+                                                        <i class="bi bi-pencil-square"></i> <span class="fw-semibold">Edit</span>
+                                                    </a>
+                                                    <a class="btn btn-danger btn-sm px-3 py-2 d-flex align-items-center gap-2 shadow-sm" asp-controller="Category" asp-action="Delete" asp-route-id="@category.Id" title="Delete Category" style="min-width: 80px;">
+                                                        <i class="bi bi-trash3-fill"></i> <span class="fw-semibold">Delete</span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
